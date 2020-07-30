@@ -33,7 +33,7 @@ function create_jwt() {
     $payload = base64_encode($payload);
 
     //Sign
-    openssl_private_encrypt($header . "." . $payload, $sign, APP_KEY);
+    openssl_private_encrypt($header . "." . $payload, $sign, openssl_get_privatekey(APP_KEY));
     $sign = base64_encode($sign);
 
     //Token
