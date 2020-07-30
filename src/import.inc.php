@@ -29,8 +29,9 @@ function make_html($content, $code) {
       href=\"//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css\">
 <script src=\"//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js\"></script>
 <script charset=\"UTF-8\"
- src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/java.min.js\"></script></head>
-<body><pre><code class='language-java'>".restore_powernukkit_links(htmlspecialchars(anonymize_ips($content)))."</code></pre></body></html>";
+ src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/java.min.js\"></script>
+<script>hljs.initHighlightingOnLoad();</script></head>
+<body><pre><code>".restore_powernukkit_links(htmlspecialchars(anonymize_ips($content)))."</code></pre></body></html>";
 }
 
 function restore_powernukkit_links($content) {
