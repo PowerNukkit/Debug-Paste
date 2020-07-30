@@ -15,7 +15,7 @@ if (!isset($_SERVER['HTTP_X_HUB_SIGNATURE'])
     || $_SERVER['HTTP_X_GITHUB_EVENT'] != 'issue_comment'
 ) {
     http_response_code(403);
-    file_put_contents('../last_failure.txt', print_r($_SERVER, true));
+    file_put_contents('../last_failure.txt', sha1(GITHUB_SECRET) . "\n\n". print_r($_SERVER, true));
     die('Illegal input');
 }
 
