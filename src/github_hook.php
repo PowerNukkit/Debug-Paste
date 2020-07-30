@@ -1,5 +1,6 @@
 <?php
 @require_once '../github_secret.php';
+error_reporting(E_ALL);
 
 if (!defined('GITHUB_SECRET')) {
     http_response_code(500);
