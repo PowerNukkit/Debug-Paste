@@ -13,9 +13,8 @@ header("Content-Type: text/plain");
 if ($_SERVER['REQUEST_METHOD'] != 'POST'
     || $_SERVER['HTTP_X_GITHUB_EVENT'] != 'issue' && $_SERVER['HTTP_X_GITHUB_EVENT'] != 'issue_comment'
     || !fnmatch('GitHub-Hookshot/*', $_SERVER['HTTP_USER_AGENT'])
-    || $_SERVER['HTTP_X_HUB_SIGNATURE'] == "sha1=$signature"
+    || $_SERVER['HTTP_X_HUB_SIGNATURE'] != "sha1=$signature"
 ) {
-    file_put_contents('../debug.txt', "expected: sha1=$signature\n\n". print_r($GLOBALS, true));
     http_response_code(403);
     die("Forbidden\n");
 }
