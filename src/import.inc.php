@@ -3,7 +3,7 @@ require_once 'config.inc.php';
 require_once 'internet_security.inc.php';
 function import_haste($url) {
     $code = urlencode(basename($url));
-    $content = file_get_contents($url, false, stream_context_create(array(
+    $content = file_get_contents("https://hastebin.com/raw/$code", false, stream_context_create(array(
         'http' => array(
             'method' => 'GET',
             'header' => 'User-Agent: Hastebin Java Api'
@@ -11,7 +11,7 @@ function import_haste($url) {
     )));
     $content = auto_import_pastes($content);
     $content = make_html($content, $code);
-    file_put_contents(PASTES_DIR."/$code.txt", $content);
+    file_put_contents(PASTES_DIR."/$code.html", $content);
     return $code;
 }
 
