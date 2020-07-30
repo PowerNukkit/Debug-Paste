@@ -6,7 +6,7 @@ function handle_issue_comment_edited($hook) {
     if ($new_body != $hook['comment']['body']) {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $hook['comment_url']);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array('body' => $new_body)));
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
@@ -14,7 +14,7 @@ function handle_issue_comment_edited($hook) {
             'Accept: application/vnd.github.machine-man-preview+json',
             'Authorization: Bearer ' . create_jwt()
         ));
-        curl_exec($curl);
+        print_r(curl_exec($curl));
         curl_close($curl);
     }
 }
