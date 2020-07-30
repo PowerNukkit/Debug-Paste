@@ -49,3 +49,23 @@ function create_jwt() {
     //Token
     return $header . '.' . $payload . '.' . $sign;
 }
+
+function create_installation_token($installation) {
+    $installation = rawurlencode($installation);
+    $curl = curl_init();
+    $opts = array (
+        CURLOPT_URL => "https://api.github.com/app/installations/$installation/access_tokens",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_USERAGENT => 'PowerNukkit',
+        CURLOPT_HTTPHEADER => array(
+            'Accept: application/vnd.github.v3+json',
+            'Authorization: Bearer ' . create_jwt()
+        )
+    );
+    curl_setopt_array($curl, $opts);
+    $token = curl_exec($curl);
+    curl_close($curl);
+    $token = json_decode($token);
+    return "token ".$token['token'];
+}
