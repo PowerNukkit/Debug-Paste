@@ -14,10 +14,10 @@ $signature = hash_hmac('sha1', $post_data, GITHUB_SECRET);
 
 // required data in headers - probably doesn't need changing
 $required_headers = array(
-    'REQUEST_METHOD' => 'POST',
-    'HTTP_X_GITHUB_EVENT' => '^issue(_comment)?$',
-    'HTTP_USER_AGENT' => '@^GitHub-Hookshot/?.*@',
-    'HTTP_X_HUB_SIGNATURE' => 'sha1=' . $signature,
+    'REQUEST_METHOD' => '|POST|',
+    'HTTP_X_GITHUB_EVENT' => '|^issue(_comment)?$|',
+    'HTTP_USER_AGENT' => '@^GitHub-Hookshot/.+@',
+    'HTTP_X_HUB_SIGNATURE' => '|sha1=|' . $signature,
 );
 
 // END OF CONFIGURATION
