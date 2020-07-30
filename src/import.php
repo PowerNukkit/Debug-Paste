@@ -15,4 +15,6 @@ if (!preg_match("@https://hastebin\.com/[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)?@", $haste)
     die("Illegal URL");
 }
 
-echo import_haste($haste);
+$code = import_haste($haste);
+header("Location: pastes/$code");
+echo $code;
