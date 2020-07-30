@@ -33,7 +33,17 @@ function create_jwt() {
     $payload = base64_encode($payload);
 
     //Sign
-    openssl_private_encrypt($header . "." . $payload, $sign, openssl_get_privatekey(APP_KEY));
+    $key = openssl_get_privatekey(APP_KEY);
+    if ($key == false) {
+        http_response_code(500);
+        die('Failed to load the key');
+    }
+
+    if(!openssl_private_encrypt($header . "." . $payload, $sign, $key)){
+        http_response_code(500);
+        die('Failed to use the key');
+    }
+
     $sign = base64_encode($sign);
 
     //Token
