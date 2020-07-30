@@ -1,5 +1,5 @@
 <?php
-require_once '../import.inc.php';
+require_once __DIR__.'/../import.inc.php';
 
 function handle_issue_comment_edited($hook) {
     $new_body = auto_import_pastes($hook['comment']['body']);
