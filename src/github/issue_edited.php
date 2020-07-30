@@ -1,6 +1,5 @@
 <?php
 require_once '../import.inc.php';
-require_once '../config.inc.php';
 
 function handle_issue_edited($hook) {
     $new_body = auto_import_pastes($hook['issue']['body']);

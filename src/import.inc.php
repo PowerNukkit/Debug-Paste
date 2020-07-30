@@ -1,6 +1,7 @@
 <?php
 require_once 'config.inc.php';
 require_once 'internet_security.inc.php';
+
 function import_haste($url) {
     $code = urlencode(basename($url));
     $content = file_get_contents("https://hastebin.com/raw/$code", false, stream_context_create(array(

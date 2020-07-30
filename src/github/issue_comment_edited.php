@@ -1,4 +1,6 @@
 <?php
+require_once '../import.inc.php';
+
 function handle_issue_comment_edited($hook) {
     $new_body = auto_import_pastes($hook['comment']['body']);
     if ($new_body != $hook['comment']['body']) {
