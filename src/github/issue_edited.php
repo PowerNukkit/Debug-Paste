@@ -5,15 +5,18 @@ function handle_issue_edited($hook) {
     $new_body = auto_import_pastes($hook['issue']['body']);
     if ($new_body != $hook['issue']['body']) {
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $hook['url']);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array('body' => $new_body)));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Accept: application/vnd.github.machine-man-preview+json',
-            'Authorization: Bearer '.create_jwt()
-        ));
+        $opts = array (
+            CURLOPT_URL => $hook['issue']['url'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_USERAGENT => 'PowerNukkit',
+            CURLOPT_POSTFIELDS => json_encode(array('body' => $new_body)),
+            CURLOPT_HTTPHEADER => array(
+                'Accept: application/vnd.github.v3+json',
+                'Authorization: Bearer ' . create_jwt()
+            )
+        );
+        curl_setopt_array($curl, $opts);
         curl_exec($curl);
         curl_close($curl);
     }

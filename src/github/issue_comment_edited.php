@@ -9,6 +9,7 @@ function handle_issue_comment_edited($hook) {
             CURLOPT_URL => $hook['comment']['url'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_USERAGENT => 'PowerNukkit',
             CURLOPT_POSTFIELDS => json_encode(array('body' => $new_body)),
             CURLOPT_HTTPHEADER => array(
                 'Accept: application/vnd.github.v3+json',
