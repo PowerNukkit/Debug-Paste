@@ -36,12 +36,12 @@ function create_jwt() {
     $key = openssl_get_privatekey(APP_KEY);
     if ($key == false) {
         http_response_code(500);
-        die('Failed to load the key');
+        die('Failed to load the key. '.openssl_error_string());
     }
 
     if(!openssl_private_encrypt($header . "." . $payload, $sign, $key)){
         http_response_code(500);
-        die('Failed to use the key');
+        die('Failed to use the key '.openssl_error_string());
     }
 
     $sign = base64_encode($sign);
