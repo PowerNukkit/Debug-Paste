@@ -11,7 +11,7 @@ function anonymize_ips($content) {
         return $matches[1].$anonymous.$matches[3];
     }, $content);
 
-    $content = preg_replace_callback('@^(\s*(?:server-(?:ip|port)|level-seed|(?:sub-)?motd)\s*=).*@', function ($matches) {
+    $content = preg_replace_callback('@(\s*(?:server-(?:ip|port)|level-seed|(?:sub-)?motd)\s*=).*?@', function ($matches) {
         return $matches[1].'#auto-removed#';
     }, $content);
 
