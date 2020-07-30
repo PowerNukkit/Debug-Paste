@@ -6,7 +6,7 @@ function handle_issue_comment_edited($hook) {
     if ($new_body != $hook['comment']['body']) {
         $curl = curl_init();
         $opts = array (
-            CURLOPT_URL => $hook['comment_url'],
+            CURLOPT_URL => $hook['comments_url'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'PATCH',
             CURLOPT_POSTFIELDS => json_encode(array('body' => $new_body)),
