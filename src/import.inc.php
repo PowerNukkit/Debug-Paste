@@ -1,13 +1,14 @@
 <?php
 require_once 'config.inc.php';
+require_once 'internet_security.inc.php';
 function import_haste($url) {
     $code = urlencode(basename($url));
-    $content = file_get_contents($url, false, array(
+    $content = file_get_contents($url, false, stream_context_create(array(
         'http' => array(
             'method' => 'GET',
             'header' => 'User-Agent: Hastebin Java Api'
         )
-    ));
+    )));
     $content = auto_import_pastes($content);
     $content = make_html($content, $code);
     file_put_contents(PASTES_DIR."/$code.txt", $content);
@@ -29,7 +30,7 @@ function make_html($content, $code) {
 <script src=\"//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js\"></script>
 <script charset=\"UTF-8\"
  src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/java.min.js\"></script></head>
-<body><pre><code class='language-java'>".restore_powernukkit_links(htmlspecialchars($content))."</code></pre></body></html>";
+<body><pre><code class='language-java'>".restore_powernukkit_links(htmlspecialchars(anonymize_ips($content)))."</code></pre></body></html>";
 }
 
 function restore_powernukkit_links($content) {
