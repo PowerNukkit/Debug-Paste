@@ -55,8 +55,8 @@ function resolve_commits($installation, $repo_url, $list) {
         $commit = curl_exec($curl);
         curl_close($curl);
         $json = json_decode($commit);
-        if (!$commit || !$json || !isset($json['sha'])) {
-            $resolved[] = $json['sha'];
+        if (!$commit || !$json || !$json->sha) {
+            $resolved[] = $json->sha;
         }
     }
 
