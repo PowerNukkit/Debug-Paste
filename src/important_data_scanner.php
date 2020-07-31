@@ -29,17 +29,14 @@ function detect_versions($content) {
         $paste = file_get_contents(PASTES_DIR.'/'.$paste[1]);
         if ($paste) {
             $detection = detect_versions($paste);
-            $versions = array_merge($detection['versions']);
-            $commits = array_merge($detection['commits']);
+            $versions = array_merge($versions, $detection['versions']);
+            $commits = array_merge($commits, $detection['commits']);
         }
     }
 
-    array_unique($versions);
-    array_unique($short_commits);
-
     return array(
-        'versions' => $versions,
-        'commits' => $commits
+        'versions' => array_unique($versions),
+        'commits' => array_unique($commits)
     );
 }
 
@@ -67,11 +64,10 @@ function resolve_commits($installation, $repo_url, $list) {
         $commit = curl_exec($curl);
         curl_close($curl);
         $json = json_decode($commit);
-        if (!$commit || !$json || !$json->sha) {
+        if ($json && $json->sha) {
             $resolved[] = $json->sha;
         }
     }
 
-    array_unique($resolved);
-    return $resolved;
+    return array_unique($resolved);
 }

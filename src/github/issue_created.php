@@ -4,7 +4,7 @@ require_once 'chatter.php';
 require_once __DIR__.'/../important_data_scanner.php';
 
 function handle_issue_created($hook) {
-    $new_body = handle_issue_edited($hook);
+    $new_body = auto_import_pastes($hook['issue']['body']);
     $detections = detect_versions($new_body);
     $versions = $detections['versions'];
     $commits = resolve_commits($hook['installation']['id'], $hook['issue']['repository_url'], $detections['commits']);
@@ -48,20 +48,30 @@ function handle_issue_created($hook) {
         }
     }
 
-    $msg .= "\n<!--\nSTATE: ".json_encode(array(
+    $msg .= "\n<!--\n## STATE ##\n ".json_encode(array(
             'storage' => 1,
             'versions' => $versions,
             'commits' => $commits
-        ))."\n-->";
+        ), JSON_PRETTY_PRINT)."\n## STATE_END ##\n-->";
     send_new_comment($hook['installation']['id'], $hook['issue']['comments_url'], $msg);
+
+    $updates = array();
     if (!empty($add_labels)) {
         foreach ($hook['issue']['labels'] as $label) {
             $add_labels[] = $label['name'];
         }
-        array_unique($add_labels);
-        update_issue($hook['installation']['id'], $hook['issue']['url'], array(
-            'labels' => $add_labels,
-            'assignees' => array('powernukkit')
-        ));
+
+        $assignees = $hook['issue'];
+        $assignees[] = 'powernukkit';
+        $updates = array(
+            'labels' => array_unique($add_labels),
+            'assignees' => array_unique($assignees)
+        );
+    }
+    if ($new_body != $hook['issue']['body']) {
+        $updates['body'] = $new_body;
+    }
+    if (!empty($updates)) {
+        update_issue($hook['installation']['id'], $hook['issue']['url'], $updates);
     }
 }
