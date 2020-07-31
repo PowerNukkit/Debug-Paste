@@ -73,5 +73,5 @@ function create_installation_token($installation) {
         die("Could not parse the result for installation $installation:\n\n$result");
 
     }
-    return "token ".$json['token'];
+    return "token ".$json->token;
 }
