@@ -64,8 +64,12 @@ function create_installation_token($installation) {
         )
     );
     curl_setopt_array($curl, $opts);
-    $token = curl_exec($curl);
+    $result = curl_exec($curl);
     curl_close($curl);
-    $token = json_decode($token);
-    return "token ".$token['token'];
+    $json = json_decode($result);
+    if (!$json) {
+        http_response_code(500);
+        die("Could not parse the result:\n$result");
+    }
+    return "token ".$json['token'];
 }
