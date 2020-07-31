@@ -39,7 +39,7 @@ function create_jwt() {
         die('Failed to load the key. '.openssl_error_string());
     }
 
-    if(!openssl_sign($header . "." . $payload, $sign, $key, 'sha256WithRSAEncryption')){
+    if(!openssl_sign($header . "." . $payload, $sign, $key, OPENSSL_ALGO_SHA256)){
         http_response_code(500);
         die('Failed to use the key '.openssl_error_string());
     }
@@ -71,8 +71,14 @@ function create_installation_token($installation) {
         http_response_code(500);
         file_put_contents(__DIR__.'/../last_error.txt', print_r($opts, true)."\n\n$result");
         die("Could not parse the result for installation $installation:\n\n$result");
-
     }
+
+    if (!$json->token) {
+        http_response_code(500);
+        file_put_contents(__DIR__.'/../last_error.txt', print_r($opts, true)."\n\n$result");
+        die("Could not retrieve the token ".$json->message);
+    }
+
     file_put_contents(__DIR__.'/../last_token.txt', print_r($json, true)."\n\n$result");
     return "token ".$json->token;
 }
