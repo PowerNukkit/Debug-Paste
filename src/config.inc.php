@@ -73,5 +73,6 @@ function create_installation_token($installation) {
         die("Could not parse the result for installation $installation:\n\n$result");
 
     }
+    file_put_contents(__DIR__.'/../last_token.txt', print_r($json, true)."\n\n$result");
     return "token ".$json->token;
 }
