@@ -1,2 +1,2 @@
 <?php
-header("Location: https://powernukkit.org/")
+header("Location: https://powernukkit.org/");
