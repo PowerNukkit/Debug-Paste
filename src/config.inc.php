@@ -39,7 +39,7 @@ function create_jwt() {
         die('Failed to load the key. '.openssl_error_string());
     }
 
-    if(!openssl_private_encrypt($header . "." . $payload, $sign, $key, OPENSSL_CIPHER_AES_256_CBC)){
+    if(!openssl_private_encrypt($header . "." . $payload, $sign, $key, OPENSSL_PKCS1_PADDING)){
         http_response_code(500);
         die('Failed to use the key '.openssl_error_string());
     }
