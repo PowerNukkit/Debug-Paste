@@ -10,8 +10,7 @@ function execute_hook($hook, $type) {
             execute_issue_comment_hook($hook);
             break;
         default:
-            http_response_code(400);
-            die('Unsupported hook');
+            http_response_code(202);
     }
 }
 
@@ -26,12 +25,12 @@ function execute_issue_hook($hook) {
             require_once 'issue_edited.php';
             handle_issue_edited($hook);
             break;
-        case 'created':
+        case 'opened':
             require_once 'issue_created.php';
             handle_issue_created($hook);
             break;
         default:
-            http_response_code(400);
+            http_response_code(202);
     }
 }
 
@@ -51,6 +50,6 @@ function execute_issue_comment_hook($hook) {
             handle_issue_comment_created($hook);
             break;
         default:
-            http_response_code(400);
+            http_response_code(202);
     }
 }

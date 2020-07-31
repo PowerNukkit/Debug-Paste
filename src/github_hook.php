@@ -10,7 +10,7 @@ $signature = hash_hmac('sha1', $post_data, GITHUB_SECRET);
 
 header("Content-Type: text/plain");
 if ($_SERVER['REQUEST_METHOD'] != 'POST'
-    || $_SERVER['HTTP_X_GITHUB_EVENT'] != 'issue' && $_SERVER['HTTP_X_GITHUB_EVENT'] != 'issue_comment'
+    || !isset($_SERVER['HTTP_X_GITHUB_EVENT'])
     || !fnmatch('GitHub-Hookshot/*', $_SERVER['HTTP_USER_AGENT'])
     || $_SERVER['HTTP_X_HUB_SIGNATURE'] != "sha1=$signature"
 ) {
