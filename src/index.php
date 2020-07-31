@@ -1,2 +1,2 @@
 <?php
-http_redirect('https://powernukkit.org');
+header("Location: https://powernukkit.org/");
