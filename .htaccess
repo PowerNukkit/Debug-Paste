@@ -1,0 +1,2 @@
+Redirect / https://powernukkit.org
+ErrorDocument 404 https://powernukkit.org
