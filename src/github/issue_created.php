@@ -8,7 +8,7 @@ function handle_issue_created($hook) {
     $versions = $detections['versions'];
     $commits = resolve_commits($hook['installation']['id'], $hook['issue']['repository_url'], $detections['commits']);
 
-    $msg = "Hey ${hook['issue']['user']['login']}, thank you for the report!\n\n";
+    $msg = "Hey ".$hook['issue']['user']['login'].", thank you for the report!\n\n";
 
     $add_labels = array();
 
