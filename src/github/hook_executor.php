@@ -3,7 +3,7 @@ function execute_hook($hook, $type) {
     file_put_contents("../debug-$type.txt", print_r($hook, true));
 
     switch ($type) {
-        case 'issue':
+        case 'issues':
             execute_issue_hook($hook);
             break;
         case 'issue_comment':
