@@ -4,6 +4,9 @@ require_once 'internet_security.inc.php';
 
 function import_haste($url) {
     $code = urlencode(basename($url));
+    if (is_file(PASTES_DIR."/$code.html")) {
+        return $code;
+    }
     $content = file_get_contents("https://hastebin.com/raw/$code", false, stream_context_create(array(
         'http' => array(
             'method' => 'GET',
