@@ -56,7 +56,7 @@ function create_installation_token($installation) {
     $opts = array (
         CURLOPT_URL => "https://api.github.com/app/installations/$installation/access_tokens",
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
+        CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_USERAGENT => 'PowerNukkit',
         CURLOPT_HTTPHEADER => array(
             'Accept: application/vnd.github.v3+json',
