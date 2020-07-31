@@ -51,7 +51,7 @@ function resolve_commits($installation, $repo_url, $list) {
     foreach ($list as $ref) {
         $curl = curl_init();
         $opts = array(
-            CURLOPT_URL => "$repo_url/git/commits/$ref",
+            CURLOPT_URL => "$repo_url/commits/$ref",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_USERAGENT => 'PowerNukkit',
