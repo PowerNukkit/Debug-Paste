@@ -1,5 +1,6 @@
 <?php
 require_once 'issue_edited.php';
+require_once 'chatter.php';
 require_once __DIR__.'/../important_data_scanner.php';
 
 function handle_issue_created($hook) {
