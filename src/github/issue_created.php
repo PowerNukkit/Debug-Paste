@@ -9,16 +9,17 @@ function handle_issue_created($hook) {
     $versions = $detections['versions'];
     $commits = resolve_commits($hook['installation']['id'], $hook['issue']['repository_url'], $detections['commits']);
 
-    $msg = "Hey ".$hook['issue']['user']['login'].", thank you for the report!\n\n";
+    $msg = "Hey @".$hook['issue']['user']['login'].", thank you for the report!\n\n";
 
     $add_labels = array();
 
     if (empty($versions) && empty($commits)) {
-        $msg .= ":warning: I could not detect find which PowerNukkit version you are using from your message.\n\n" .
-            "Please, run the command: `/debugpaste` it will generate a link, send us this link replying this issue. " .
+        $msg .= ":warning: **I could not detect find which PowerNukkit version you are using from your message.** :warning: \n\n" .
+            "Please, run the command: `/debugpaste` it will generate a link, send us this link replying this issue.  \n" .
             "It's an important step to get your issue resolved.\n\n" .
-            "Don't say 'latest' or 'current version', we support different versions and your latest may not be the same as our latest, ".
-            "and your latest will not be the same latest in the future, so please, use a fixed version. Thank you :thumbsup:";
+            "Don't say _latest_ or _current version_, we support different versions and your latest may not be the same as our latest, ".
+            "and your latest will not be the same latest in the future, so please, use a fixed version.\n\n" .
+            "Thank you :thumbsup:";
 
         $add_labels[] = "Status: Awaiting Response";
     }
@@ -58,6 +59,9 @@ function handle_issue_created($hook) {
             $add_labels[] = $label['name'];
         }
         array_unique($add_labels);
-        set_issue_labels($hook['installation']['id'], $hook['issue']['url'], $add_labels);
+        update_issue($hook['installation']['id'], $hook['issue']['url'], array(
+            'labels' => $add_labels,
+            'assignees' => array('powernukkit')
+        ));
     }
 }

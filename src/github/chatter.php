@@ -20,13 +20,17 @@ function send_new_comment($installation, $comments_url, $comment) {
 }
 
 function set_issue_labels($installation, $issue_url, $labels) {
+    update_issue($installation, $issue_url, array('labels' => $labels));
+}
+
+function update_issue($installation, $issue_url, $new_data) {
     $curl = curl_init();
     $opts = array (
         CURLOPT_URL => $issue_url,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => 'PATCH',
         CURLOPT_USERAGENT => 'PowerNukkit',
-        CURLOPT_POSTFIELDS => json_encode(array('labels' => $labels)),
+        CURLOPT_POSTFIELDS => json_encode($new_data),
         CURLOPT_HTTPHEADER => array(
             'Accept: application/vnd.github.v3+json',
             "Authorization: ".create_installation_token($installation)

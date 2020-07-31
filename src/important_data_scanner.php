@@ -1,4 +1,6 @@
 <?php
+require_once 'config.inc.php';
+
 function detect_versions($content) {
     $versions = array();
     $commits = array();
@@ -20,6 +22,16 @@ function detect_versions($content) {
     preg_match_all('@\b[a-f0-9]{40}\b@', $content, $long_commits, PREG_SET_ORDER);
     foreach ($long_commits as $match) {
         $commits[] = strtolower(substr($match[0], 0, 7));
+    }
+
+    preg_match_all('@https://debugpaste\.powernukkit\.org/pastes/([a-zA-Z0-9%]+\.html)@', $content, $pastes, PREG_SET_ORDER);
+    foreach ($pastes as $paste) {
+        $paste = file_get_contents(PASTES_DIR.'/'.$paste[1]);
+        if ($paste) {
+            $detection = detect_versions($paste);
+            $versions = array_merge($detection['versions']);
+            $commits = array_merge($detection['commits']);
+        }
     }
 
     array_unique($versions);
