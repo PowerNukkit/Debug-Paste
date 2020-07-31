@@ -13,7 +13,7 @@ function create_jwt() {
     //Header Token
     $header = [
         'typ' => 'JWT',
-        'alg' => 'HS256'
+        'alg' => 'RS256'
     ];
 
     //Payload - Content
@@ -39,7 +39,7 @@ function create_jwt() {
         die('Failed to load the key. '.openssl_error_string());
     }
 
-    if(!openssl_sign($header . "." . $payload, $sign, $key, 'HS256')){
+    if(!openssl_sign($header . "." . $payload, $sign, $key, OPENSSL_ALGO_SHA256)){
         http_response_code(500);
         die('Failed to use the key '.openssl_error_string());
     }
