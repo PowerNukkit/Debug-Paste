@@ -69,7 +69,9 @@ function create_installation_token($installation) {
     $json = json_decode($result);
     if (!$json) {
         http_response_code(500);
-        die("Could not parse the result:\n$result");
+        file_put_contents(__DIR__.'/../last_error.txt', print_r($opts, true)."\n\n$result");
+        die("Could not parse the result for installation $installation:\n\n$result");
+
     }
     return "token ".$json['token'];
 }
