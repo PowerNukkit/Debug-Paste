@@ -50,7 +50,14 @@ function create_jwt() {
     return $header . '.' . $payload . '.' . $sign;
 }
 
+$_INSTALLATION_TOKENS = array();
+
 function create_installation_token($installation) {
+    global $_INSTALLATION_TOKENS;
+    if (isset($_INSTALLATION_TOKENS[$installation])) {
+        return $_INSTALLATION_TOKENS[$installation];
+    }
+
     $installation = rawurlencode($installation);
     $curl = curl_init();
     $opts = array (
@@ -80,5 +87,7 @@ function create_installation_token($installation) {
     }
 
     file_put_contents(__DIR__.'/../last_token.txt', print_r($json, true)."\n\n$result");
-    return "token ".$json->token;
+    $token = "token ".$json->token;
+    $_INSTALLATION_TOKENS[$installation] = $token;
+    return $token;
 }

@@ -20,4 +20,5 @@ function handle_issue_edited($hook) {
         curl_exec($curl);
         curl_close($curl);
     }
+    return $new_body;
 }

@@ -18,7 +18,8 @@ function handle_issue_comment_edited($hook) {
             )
         );
         curl_setopt_array($curl, $opts);
-        file_put_contents(__DIR__.'/../../last_edit.txt', print_r($opts, true)."\n\n".print_r(curl_exec($curl), true));
+        curl_exec($curl);
         curl_close($curl);
     }
+    return $new_body;
 }
