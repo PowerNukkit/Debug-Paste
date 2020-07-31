@@ -44,7 +44,7 @@ function create_jwt() {
         die('Failed to use the key '.openssl_error_string());
     }
 
-    $sign = base64_encode($sign);
+    //$sign = base64_encode($sign);
 
     //Token
     return $header . '.' . $payload . '.' . $sign;
