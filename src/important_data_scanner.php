@@ -66,6 +66,8 @@ function resolve_commits($installation, $repo_url, $list) {
         $json = json_decode($commit);
         if ($json && $json->sha) {
             $resolved[] = $json->sha;
+        } else {
+            $resolved[] = "unresolved: $ref <!-- ".htmlentities($commit)." -->";
         }
     }
 
