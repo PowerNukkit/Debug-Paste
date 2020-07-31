@@ -24,9 +24,9 @@ function detect_versions($content) {
         $commits[] = strtolower(substr($match[0], 0, 7));
     }
 
-    preg_match_all('@https://debugpaste\.powernukkit\.org/pastes/([a-zA-Z0-9%]+\.html)@', $content, $pastes, PREG_SET_ORDER);
+    preg_match_all('@https://debugpaste\.powernukkit\.org/pastes/([a-zA-Z0-9%]+)(\.html)?@', $content, $pastes, PREG_SET_ORDER);
     foreach ($pastes as $paste) {
-        $paste = file_get_contents(PASTES_DIR.'/'.$paste[1]);
+        $paste = file_get_contents(PASTES_DIR.'/'.$paste[1].'.html');
         if ($paste) {
             $detection = detect_versions($paste);
             $versions = array_merge($versions, $detection['versions']);

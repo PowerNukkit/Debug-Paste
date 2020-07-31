@@ -73,4 +73,5 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 ### Persistence
-/pastes
+/pastes/*
+!/pastes/.htaccess

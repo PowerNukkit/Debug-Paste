@@ -18,7 +18,7 @@ function import_haste($url) {
 
 function auto_import_pastes($content) {
     $content = preg_replace_callback('|https://hastebin\.com/([a-zA-Z0-9]+)|', function ($matches) {
-        return "https://debugpaste.powernukkit.org/pastes/".import_haste($matches[1]).".html";
+        return "https://debugpaste.powernukkit.org/pastes/".import_haste($matches[1]);
     }, $content);
     return $content;
 }
