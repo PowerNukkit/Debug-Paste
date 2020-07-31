@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'../config.inc.php';
+require_once __DIR__.'/../config.inc.php';
 
 function send_new_comment($installation, $comments_url, $comment) {
     $curl = curl_init();
