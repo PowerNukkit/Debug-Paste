@@ -35,25 +35,22 @@ if (!$input) {
 }
 
 $tmp_dir = tempnam($tmp_dir, "debugpaste_upload");
+if (!$tmp_dir) {
+    header("HTTP/1.1 500 Internal Server Error");
+    error_log("Failed to create a temporary file");
+    exit(5);
+}
+
 if(!unlink($tmp_dir) || !mkdir($tmp_dir)) {
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Convert the temp file into a folder: $tmp_dir");
     exit(6);
 }
 
-error_log("$tmp_dir perms: ".substr(sprintf('%o', fileperms($tmp_dir)), -4));
-error_log("is_dir: ".is_dir($tmp_dir));
-
-if (!$tmp_dir) {
-    header("HTTP/1.1 500 Internal Server Error");
-    error_log("Failed to create a temporary folder");
-    exit(5);
-}
-
-/*register_shutdown_function(function () {
+register_shutdown_function(function () {
     global $tmp_dir;
     delTree($tmp_dir);
-});*/
+});
 
 $output = fopen("$tmp_dir/upload.zip", "w");
 if (!$output) {
@@ -83,6 +80,7 @@ while ($data = fread($input,1024)) {
 
 abort();
 
+header("HTTP/1.1 201 Created");
 echo "https://debugpaste.powernukkit.org/testing\n";
 echo $total;
 
@@ -93,7 +91,7 @@ function abort() {
     @fclose($output);
     @unlink($output);
     
-    //delTree($tmp_dir); dont delete for now
+    delTree($tmp_dir);
 }
 
 function delTree($dir) {
