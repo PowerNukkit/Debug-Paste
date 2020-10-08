@@ -35,6 +35,11 @@ if (!$input) {
 }
 
 $tmp_dir = tempnam($tmp_dir, "debugpaste_upload");
+if(!unlink($tmp_dir) || !mkdir($tmp_dir)) {
+    header("HTTP/1.1 500 Internal Server Error");
+    error_log("Convert the temp file into a folder: $tmp_dir");
+    exit(6);
+}
 
 error_log("$tmp_dir perms: ".substr(sprintf('%o', fileperms($tmp_dir)), -4));
 error_log("is_dir: ".is_dir($tmp_dir));
