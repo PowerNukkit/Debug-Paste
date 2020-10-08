@@ -53,7 +53,7 @@ function random_token($length = 32){
         $length = 32;
     }
     if (function_exists('random_bytes')) {
-        return binde(random_bytes($length));
+        return bin2hex(random_bytes($length));
     }
     if (function_exists('mcrypt_create_iv')) {
         return bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM));
