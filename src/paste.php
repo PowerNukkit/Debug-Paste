@@ -149,7 +149,7 @@ foreach ($direct_files as $direct_file) {
     }
 }
 
-rmdir("/pastes/$code");
+rmdir("pastes/$code");
 if(!rename($extracted, "/pastes/$code")) {
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Failed to move $extracted to pastes/$code");
