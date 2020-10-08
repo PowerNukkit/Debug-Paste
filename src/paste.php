@@ -111,7 +111,15 @@ if ($zip->open("$tmp_dir/upload.zip") !== true) {
     abort();
     exit;
 }
-if(!$zip->extractTo($extracted, array_merge($gz_files, $direct_files))) {
+
+$extracted_at_least_one = false;
+foreach (array_merge($gz_files, $direct_files) as $to_extract) {
+    if ($zip->extractTo($extracted, array_merge($gz_files, $direct_files))) {
+        $extracted_at_least_one = true;
+    }
+}
+
+if (!$extracted_at_least_one) {
     header("HTTP/1.1 400 Bad Request");
     abort();
     exit;
