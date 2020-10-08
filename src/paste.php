@@ -36,6 +36,9 @@ if (!$input) {
 
 $tmp_dir = tempnam($tmp_dir, "debugpaste_upload");
 
+error_log("$tmp_dir perms: ".substr(sprintf('%o', fileperms($tmp_dir)), -4));
+error_log("is_dir: ".is_dir($tmp_dir));
+
 if (!$tmp_dir) {
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Failed to create a temporary folder");
