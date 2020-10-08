@@ -92,25 +92,6 @@ while ($data = fread($input,1024)) {
 @fclose($output);
 @fclose($input);
 
-$code = "PN".random_token();
-$attempts = 0;
-while (is_dir("pastes/$code")) {
-    if (++$attempts > 1000) {
-        header("HTTP/1.1 500 Internal Server Error");
-        error_log("Failed to create a random code");
-        abort();
-        exit(8);
-    }
-    $code = "PN".random_token();
-}
-
-if(!mkdir("pastes/$code")) {
-    header("HTTP/1.1 500 Internal Server Error");
-    error_log("Failed to the folder pastes/$code");
-    abort();
-    exit(9);
-}
-
 $gz_files = array(
     'server-second-most-latest.log.gz'
 );
@@ -124,12 +105,66 @@ $direct_files = array(
     'thread-dump.txt',
 );
 
-if(!file_put_contents("$extracted/.htaccess", "Options +Indexes\n")) {
-    error_log("Failed to create $extracted/.htaccess");
+$zip = new ZipArchive();
+if ($zip->open("$tmp_dir/upload.zip") !== true) {
+    header("HTTP/1.1 400 Bad Request");
+    abort();
+    exit;
+}
+if(!$zip->extractTo($extracted, array_merge($gz_files, $direct_files))) {
+    header("HTTP/1.1 400 Bad Request");
+    abort();
+    exit;
+}
+
+/*$zip = zip_open("$tmp_dir/upload.zip");
+if (!is_resource($zip)) {
+    header("HTTP/1.1 400 Bad Request");
+    abort();
+    exit(11);
+}
+
+while ($entry = zip_read($zip)) {
+    $zip_entry_name = zip_entry_name($entry);
+    if (!in_array($zip_entry_name, $direct_files) && !in_array($zip_entry_name, $gz_files)) {
+        continue;
+    }
+
+    if (!zip_entry_open($zip, $entry, "r")) {
+        continue;
+    }
+    
+    zip_entry_read(zip_en)
+}*/
+
+
+$code = "PN".random_token(8);
+$attempts = 0;
+while (is_dir("pastes/$code")) {
+    if (++$attempts > 1000) {
+        header("HTTP/1.1 500 Internal Server Error");
+        error_log("Failed to create a random code");
+        abort();
+        exit(8);
+    }
+    $code = "PN".random_token();
+}
+
+$paste_dir = "pastes/$code";
+
+if(!mkdir($paste_dir)) {
+    header("HTTP/1.1 500 Internal Server Error");
+    error_log("Failed to the folder pastes/$code");
+    abort();
+    exit(9);
+}
+
+if(!file_put_contents("$paste_dir/.htaccess", "Options +Indexes\n")) {
+    error_log("Failed to create $paste_dir/.htaccess");
 }
 
 foreach ($gz_files as $gz_file) {
-    $full_path = "$tmp_dir/$gz_file";
+    $full_path = "$extracted/$gz_file";
     if (is_file($full_path)) {
         if (!gz_inflate($full_path)) {
             error_log("Failed inflate $gz_file.");
@@ -139,31 +174,34 @@ foreach ($gz_files as $gz_file) {
     }
 }
 
+
+
 foreach ($direct_files as $direct_file) {
-    $full_path = "$tmp_dir/$direct_file";
+    $full_path = "$extracted/$direct_file";
     if (is_file($full_path)) {
         $contents = file_get_contents($full_path);
-        if(!file_put_contents("$extracted/$direct_file.html", make_html($contents, "$code/$direct_file"))) {
-            error_log("Failed to write to $extracted/$direct_file.html");
+        if(!file_put_contents("$paste_dir/$direct_file.html", make_html($contents, "$code/$direct_file"))) {
+            error_log("Failed to write to $paste_dir/$direct_file.html");
         }
     }
 }
 
-
-recurse_copy($extracted, "pastes/$code");
 del_tree($tmp_dir);
 
 header("HTTP/1.1 201 Created");
 echo "https://debugpaste.powernukkit.org/pastes/$code";
 
 function abort() {
-    global $input, $output, $tmp_dir;
+    global $input, $output, $tmp_dir, $zip;
     
     @fclose($input);
     @fclose($output);
+    if ($zip) {
+        @$zip->close();
+    }
     @unlink($output);
     
-    del_tree($tmp_dir);
+    @del_tree($tmp_dir);
 }
 
 /**
