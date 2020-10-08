@@ -48,17 +48,14 @@ function add_to_queue($url) {
     import_haste($url);
 }
 
-function random_token($length = 32){
-    if(!isset($length) || intval($length) <= 8 ){
-        $length = 32;
+function uniqid_real($lenght = 13) {
+    // uniqid gives 13 chars, but you could adjust it to your needs.
+    if (function_exists("random_bytes")) {
+        $bytes = random_bytes(ceil($lenght / 2));
+    } elseif (function_exists("openssl_random_pseudo_bytes")) {
+        $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+    } else {
+        throw new Exception("no cryptographically secure random function available");
     }
-    if (function_exists('random_bytes')) {
-        return bin2hex(random_bytes($length));
-    }
-    if (function_exists('mcrypt_create_iv')) {
-        return bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM));
-    }
-    if (function_exists('openssl_random_pseudo_bytes')) {
-        return bin2hex(openssl_random_pseudo_bytes($length));
-    }
+    return substr(bin2hex($bytes), 0, $lenght);
 }

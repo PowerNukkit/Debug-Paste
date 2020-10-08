@@ -117,28 +117,7 @@ if(!$zip->extractTo($extracted, array_merge($gz_files, $direct_files))) {
     exit;
 }
 
-/*$zip = zip_open("$tmp_dir/upload.zip");
-if (!is_resource($zip)) {
-    header("HTTP/1.1 400 Bad Request");
-    abort();
-    exit(11);
-}
-
-while ($entry = zip_read($zip)) {
-    $zip_entry_name = zip_entry_name($entry);
-    if (!in_array($zip_entry_name, $direct_files) && !in_array($zip_entry_name, $gz_files)) {
-        continue;
-    }
-
-    if (!zip_entry_open($zip, $entry, "r")) {
-        continue;
-    }
-    
-    zip_entry_read(zip_en)
-}*/
-
-
-$code = "PN".random_token(8);
+$code = 'PN'.uniqid_real(8);
 $attempts = 0;
 while (is_dir("pastes/$code")) {
     if (++$attempts > 1000) {
@@ -147,7 +126,7 @@ while (is_dir("pastes/$code")) {
         abort();
         exit(8);
     }
-    $code = "PN".random_token();
+    $code = 'PN'.uniqid_real(8);
 }
 
 $paste_dir = "pastes/$code";
