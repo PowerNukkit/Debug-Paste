@@ -5,12 +5,12 @@ if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
     exit;
 }
 
-if (@$_SERVER['HTTP_CONTENT_TYPE'] != "application/zip") {
+if (@$_SERVER['CONTENT_TYPE'] != "application/zip") {
     header("HTTP/1.1 415 Unsupported Media Type");
     exit;
 }
 
-$len = @$_SERVER['HTTP_CONTENT_LENGTH'];
+$len = @$_SERVER['CONTENT_LENGTH'];
 if (!$len || $len <= 0) {
     header("HTTP/1.1 411 Length Required");
     exit;
@@ -35,11 +35,23 @@ if (!$input) {
 }
 
 $tmp_dir = tempnam($tmp_dir, "debugpaste_upload");
+
+if (!$tmp_dir) {
+    header("HTTP/1.1 500 Internal Server Error");
+    error_log("Failed to create a temporary folder");
+    exit(5);
+}
+
+register_shutdown_function(function () {
+    global $tmp_dir;
+    delTree($tmp_dir);
+});
+
 $output = fopen("$tmp_dir/upload.zip", "w");
 if (!$output) {
-    @fclose($input);
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Failed to open the file for writing: $tmp_dir/upload.zip");
+    abort();
     exit(2);
 }
 
