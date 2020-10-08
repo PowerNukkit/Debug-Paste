@@ -42,10 +42,10 @@ if (!$tmp_dir) {
     exit(5);
 }
 
-register_shutdown_function(function () {
+/*register_shutdown_function(function () {
     global $tmp_dir;
     delTree($tmp_dir);
-});
+});*/
 
 $output = fopen("$tmp_dir/upload.zip", "w");
 if (!$output) {
@@ -85,7 +85,7 @@ function abort() {
     @fclose($output);
     @unlink($output);
     
-    delTree($tmp_dir);
+    //delTree($tmp_dir); dont delete for now
 }
 
 function delTree($dir) {
