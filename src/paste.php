@@ -59,7 +59,7 @@ if (!mkdir($extracted)) {
 register_shutdown_function(function () {
     global $tmp_dir;
     if (is_dir($tmp_dir) || is_file($tmp_dir)) {
-        delTree($tmp_dir);
+        del_tree($tmp_dir);
     }
 });
 
@@ -149,15 +149,9 @@ foreach ($direct_files as $direct_file) {
     }
 }
 
-rmdir("pastes/$code");
-if(!rename($extracted, "pastes/$code")) {
-    header("HTTP/1.1 500 Internal Server Error");
-    error_log("Failed to move $extracted to pastes/$code");
-    abort();
-    exit(10);
-}
 
-delTree($tmp_dir);
+recurse_copy($extracted, "pastes/$code");
+del_tree($tmp_dir);
 
 header("HTTP/1.1 201 Created");
 echo "https://debugpaste.powernukkit.org/pastes/$code";
@@ -169,7 +163,7 @@ function abort() {
     @fclose($output);
     @unlink($output);
     
-    delTree($tmp_dir);
+    del_tree($tmp_dir);
 }
 
 /**
@@ -218,10 +212,26 @@ function gz_inflate(string $from_file, string $to_file = null) {
     }
 }
 
-function delTree($dir) {
+function del_tree($dir) {
     $files = array_diff(scandir($dir), array('.','..'));
     foreach ($files as $file) {
-        (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+        (is_dir("$dir/$file")) ? del_tree("$dir/$file") : unlink("$dir/$file");
     }
     return rmdir($dir);
+}
+
+function recurse_copy($src,$dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . '/' . $file) ) {
+                recurse_copy($src . '/' . $file,$dst . '/' . $file);
+            }
+            else {
+                copy($src . '/' . $file,$dst . '/' . $file);
+            }
+        }
+    }
+    closedir($dir);
 }
