@@ -58,7 +58,9 @@ if (!mkdir($extracted)) {
 
 register_shutdown_function(function () {
     global $tmp_dir;
-    delTree($tmp_dir);
+    if (is_dir($tmp_dir) || is_file($tmp_dir)) {
+        delTree($tmp_dir);
+    }
 });
 
 $output = fopen("$tmp_dir/upload.zip", "wb");
@@ -147,7 +149,7 @@ foreach ($direct_files as $direct_file) {
     }
 }
 
-if(!rename($extracted, "pastes/$code")) {
+if(!rename($extracted, realpath(dirname(__FILE__))."/pastes/$code")) {
     header("HTTP/1.1 500 Internal Server Error");
     error_log("Failed to move $extracted to pastes/$code");
     abort();
