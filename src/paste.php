@@ -114,7 +114,7 @@ if ($zip->open("$tmp_dir/upload.zip") !== true) {
 
 $extracted_at_least_one = false;
 foreach (array_merge($gz_files, $direct_files) as $to_extract) {
-    if ($zip->extractTo($extracted, array_merge($gz_files, $direct_files))) {
+    if ($zip->extractTo($extracted, $to_extract)) {
         $extracted_at_least_one = true;
     }
 }
