@@ -23,7 +23,7 @@ function anonymize_ips($content) {
         return $anonymous;
     }, $content);
 
-    $content = preg_replace_callback('@(\s*(?:server-(?:ip|port)|level-seed|(?:sub-)?motd)\s*=)[^\n\r]+@', function ($matches) {
+    $content = preg_replace_callback('@(\s*(?:server-(?:ip|port)|level-seed|rcon.password|(?:sub-)?motd)\s*=)[^\n\r]+|passwo?r?d@', function ($matches) {
         return $matches[1].'#auto-removed#';
     }, $content);
 
