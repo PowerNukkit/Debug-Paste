@@ -15,7 +15,7 @@ function handle_issue_created($hook) {
 
     if (empty($versions) && empty($commits)) {
         $msg .= ":warning: **I could not find which PowerNukkit version you are using from your message.** :warning: \n\n" .
-            "Please, run the command: `/debugpaste` it will generate a link, send us this link replying this issue.  \n" .
+            "Please, run the command: `/debugpaste` (legacy) or `/debugpaste upload` (1.4.0.0-PN+) it will generate a link, send us this link replying this issue.  \n" .
             "It's an important step to get your issue resolved.\n\n" .
             "Don't say _latest_ or _current version_, we support different versions and your latest may not be the same latest as our, ".
             "and your latest will not be the same latest in the future, so please, use a fixed version.\n\n" .
